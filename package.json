@@ -1,0 +1,31 @@
+{
+    "name": "database-engineering-api",
+    "version": "1.0.0",
+    "description": "A practical MongoDB and Mongoose backend API demonstrating CRUD operations, schema design, validation, indexes, relationships, transactions, pagination, filtering, sorting, searching, soft deletes, and seed data.",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
+        "seed": "node scripts/seed.js"
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "mongodb",
+        "mongoose",
+        "database",
+        "backend",
+        "rest-api",
+        "database-engineering"
+    ],
+    "author": "Ashish Ranjan",
+    "license": "MIT",
+    "dependencies": {
+        "dotenv": "^16.6.1",
+        "express": "^4.21.2",
+        "mongoose": "^9.9.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10"
+    }
+}

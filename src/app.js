@@ -1,0 +1,45 @@
+const express = require("express");
+
+const productRoutes = require("./routes/product.routes");
+const notFound = require("./middlewares/notFound.middleware");
+const errorHandler = require("./middlewares/errorHandler.middleware");
+
+const app = express();
+
+// Hide the default Express header for a cleaner production response.
+app.disable("x-powered-by");
+
+// Parse incoming JSON request bodies.
+app.use(express.json());
+
+// Root endpoint confirms that the API is available.
+app.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Database Engineering API is running.",
+        version: "v1",
+    });
+});
+
+// Health endpoint provides basic runtime information.
+app.get("/api/v1/health", (req, res) => {
+    res.status(200).json({
+        success: true,
+        status: "healthy",
+        service: "database-engineering-api",
+        version: "1.0.0",
+        uptime: Number(process.uptime().toFixed(2)),
+        timestamp: new Date().toISOString(),
+    });
+});
+
+// All product-related database routes are versioned under /api/v1.
+app.use("/api/v1/products", productRoutes);
+
+// Handle unmatched routes after all valid routes have been checked.
+app.use(notFound);
+
+// Keep the centralized error handler as the final middleware.
+app.use(errorHandler);
+
+module.exports = app;
