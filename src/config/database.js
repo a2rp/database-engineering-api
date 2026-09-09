@@ -2,9 +2,11 @@ const mongoose = require("mongoose");
 
 // Connect the application to MongoDB using the URI from environment variables.
 const connectDatabase = async () => {
-    const mongoUri =
-        process.env.MONGODB_URI ||
-        "mongodb://127.0.0.1:27017/database_engineering_api";
+    const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+        throw new Error("MONGO_URI is not configured.");
+    }
 
     await mongoose.connect(mongoUri);
 

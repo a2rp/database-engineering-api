@@ -133,10 +133,12 @@ Create a `.env` file using `.env.example`:
 
 ```env
 PORT=1198
-MONGODB_URI=mongodb://127.0.0.1:27017/database_engineering_api
+MONGO_URI=mongodb://127.0.0.1:27017/database_engineering_api
 ```
 
 The `.env` file is ignored by Git, while `.env.example` documents the required environment variables.
+
+Every JSON response starts with `apiUrl`, and each request is logged with its method, path, and status code.
 
 ## Installation
 

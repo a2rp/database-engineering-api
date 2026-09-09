@@ -9,8 +9,24 @@ const app = express();
 // Hide the default Express header for a cleaner production response.
 app.disable("x-powered-by");
 
-// Parse incoming JSON request bodies.
-app.use(express.json());
+// Parse incoming JSON request bodies with a conservative size limit.
+app.use(express.json({ limit: "1mb" }));
+
+// Keep responses consistent: the requested endpoint is always the first field.
+app.use((req, res, next) => {
+    const sendJson = res.json.bind(res);
+    res.json = (body) => {
+        if (body && typeof body === "object" && !Array.isArray(body)) {
+            return sendJson({ apiUrl: req.originalUrl, ...body });
+        }
+        return sendJson({ apiUrl: req.originalUrl, data: body });
+    };
+
+    res.on("finish", () => {
+        console.log(`[API] ${req.method} ${req.originalUrl} -> ${res.statusCode}`);
+    });
+    next();
+});
 
 // Root endpoint confirms that the API is available.
 app.get("/", (req, res) => {
