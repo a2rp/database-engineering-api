@@ -1,5 +1,7 @@
 const Product = require("../models/product.model");
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 // Fetch products with pagination, filtering, sorting, searching,
 // and optional access to soft-deleted records.
 const getProducts = async (req, res, next) => {
@@ -34,7 +36,7 @@ const getProducts = async (req, res, next) => {
         // Match category values without depending on letter case.
         if (category) {
             filter.category = {
-                $regex: `^${category}$`,
+                $regex: `^${escapeRegex(category.trim())}$`,
                 $options: "i",
             };
         }

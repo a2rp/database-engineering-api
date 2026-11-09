@@ -140,6 +140,8 @@ The `.env` file is ignored by Git, while `.env.example` documents the required e
 
 Every JSON response starts with `apiUrl`, and each request is logged with its method, path, and status code.
 
+The health endpoint returns HTTP 503 when MongoDB is disconnected. Unexpected server errors return a generic message; details are written to the server log.
+
 ## Installation
 
 ```bash
@@ -176,33 +178,25 @@ npm start
 
 ```text
 database-engineering-api/
-â”œâ”€â”€ scripts/
-â”‚   â””â”€â”€ seed.js
-â”œâ”€â”€ src/
-â”‚   â”œâ”€â”€ config/
-â”‚   â”‚   â””â”€â”€ database.js
-â”‚   â”œâ”€â”€ controllers/
-â”‚   â”‚   â””â”€â”€ product.controllers.js
-â”‚   â”œâ”€â”€ middlewares/
-â”‚   â”‚   â”œâ”€â”€ errorHandler.middleware.js
-â”‚   â”‚   â””â”€â”€ notFound.middleware.js
-â”‚   â”œâ”€â”€ models/
-â”‚   â”‚   â””â”€â”€ product.model.js
-â”‚   â”œâ”€â”€ routes/
-â”‚   â”‚   â””â”€â”€ product.routes.js
-â”‚   â”œâ”€â”€ validators/
-â”‚   â”‚   â””â”€â”€ product.validators.js
-â”‚   â”œâ”€â”€ app.js
-â”‚   â””â”€â”€ server.js
-â”œâ”€â”€ .env.example
-â”œâ”€â”€ .gitignore
-â”œâ”€â”€ package.json
-â”œâ”€â”€ requests.http
-â””â”€â”€ README.md
+|-- scripts/
+|   `-- seed.js
+|-- src/
+|   |-- config/database.js
+|   |-- controllers/product.controllers.js
+|   |-- middlewares/
+|   |   |-- errorHandler.middleware.js
+|   |   `-- notFound.middleware.js
+|   |-- models/product.model.js
+|   |-- routes/product.routes.js
+|   |-- validators/product.validators.js
+|   |-- app.js
+|   `-- server.js
+|-- .env.example
+|-- .gitignore
+|-- package.json
+|-- requests.http
+`-- README.md
 ```
-
-## Documentation
-
 
 ## Author
 

@@ -35,15 +35,18 @@ const errorHandler = (error, req, res, next) => {
     }
 
     // Use a custom status code when one has been assigned intentionally.
+    const errorStatus = error.statusCode ?? error.status;
     const statusCode =
-        Number.isInteger(error.statusCode) &&
-        error.statusCode >= 400 &&
-        error.statusCode < 600
-            ? error.statusCode
+        Number.isInteger(errorStatus) &&
+        errorStatus >= 400 &&
+        errorStatus < 600
+            ? errorStatus
             : 500;
 
     const message =
-        typeof error.message === "string" && error.message.trim()
+        statusCode < 500 &&
+        typeof error.message === "string" &&
+        error.message.trim()
             ? error.message
             : "Internal server error.";
 

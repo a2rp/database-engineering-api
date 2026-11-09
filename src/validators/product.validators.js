@@ -25,6 +25,13 @@ const validateProductId = (req, res, next) => {
 
 // Validate the full product payload used by create and update routes.
 const validateProductInput = (req, res, next) => {
+    if (!req.body || typeof req.body !== "object" || Array.isArray(req.body)) {
+        return res.status(400).json({
+            success: false,
+            message: "Request body must be a JSON object.",
+        });
+    }
+
     const { name, description, category, price, inStock } = req.body;
 
     const errors = [];
@@ -78,6 +85,8 @@ const validateProductQuery = (req, res, next) => {
     const {
         minPrice,
         maxPrice,
+        search,
+        category,
         inStock,
         includeDeleted,
         sort = "createdAt",
@@ -89,15 +98,29 @@ const validateProductQuery = (req, res, next) => {
     const errors = [];
 
     if (
+        search !== undefined &&
+        (typeof search !== "string" || search.length > 100)
+    ) {
+        errors.push("search must be a string with at most 100 characters.");
+    }
+
+    if (
+        category !== undefined &&
+        (typeof category !== "string" || category.trim().length > 50)
+    ) {
+        errors.push("category must be a string with at most 50 characters.");
+    }
+
+    if (
         minPrice !== undefined &&
-        (Number.isNaN(Number(minPrice)) || Number(minPrice) < 0)
+        (!Number.isFinite(Number(minPrice)) || Number(minPrice) < 0)
     ) {
         errors.push("minPrice must be a valid non-negative number.");
     }
 
     if (
         maxPrice !== undefined &&
-        (Number.isNaN(Number(maxPrice)) || Number(maxPrice) < 0)
+        (!Number.isFinite(Number(maxPrice)) || Number(maxPrice) < 0)
     ) {
         errors.push("maxPrice must be a valid non-negative number.");
     }
@@ -110,22 +133,26 @@ const validateProductQuery = (req, res, next) => {
         errors.push("minPrice cannot be greater than maxPrice.");
     }
 
-    if (inStock !== undefined && !["true", "false"].includes(inStock)) {
+    if (
+        inStock !== undefined &&
+        (typeof inStock !== "string" || !["true", "false"].includes(inStock))
+    ) {
         errors.push("inStock must be either true or false.");
     }
 
     if (
         includeDeleted !== undefined &&
-        !["true", "false"].includes(includeDeleted)
+        (typeof includeDeleted !== "string" ||
+            !["true", "false"].includes(includeDeleted))
     ) {
         errors.push("includeDeleted must be either true or false.");
     }
 
-    if (!allowedSortFields.includes(sort)) {
+    if (typeof sort !== "string" || !allowedSortFields.includes(sort)) {
         errors.push(`sort must be one of: ${allowedSortFields.join(", ")}.`);
     }
 
-    if (!["asc", "desc"].includes(order)) {
+    if (typeof order !== "string" || !["asc", "desc"].includes(order)) {
         errors.push("order must be either asc or desc.");
     }
 

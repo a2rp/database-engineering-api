@@ -1,7 +1,7 @@
 {
     "name": "database-engineering-api",
     "version": "1.0.0",
-    "description": "A practical MongoDB and Mongoose backend API demonstrating CRUD operations, schema design, validation, indexes, relationships, transactions, pagination, filtering, sorting, searching, soft deletes, and seed data.",
+    "description": "A MongoDB and Mongoose REST API demonstrating product CRUD, schema validation, indexes, filtering, pagination, and soft deletes.",
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
@@ -27,5 +27,8 @@
     },
     "devDependencies": {
         "nodemon": "^3.1.10"
+    },
+    "overrides": {
+        "minimatch": "11.0.5"
     }
 }

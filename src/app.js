@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const productRoutes = require("./routes/product.routes");
 const notFound = require("./middlewares/notFound.middleware");
@@ -23,7 +24,7 @@ app.use((req, res, next) => {
     };
 
     res.on("finish", () => {
-        console.log(`[API] ${req.method} ${req.originalUrl} -> ${res.statusCode}`);
+        console.log(`[API] ${req.method} ${req.path} -> ${res.statusCode}`);
     });
     next();
 });
@@ -39,9 +40,11 @@ app.get("/", (req, res) => {
 
 // Health endpoint provides basic runtime information.
 app.get("/api/v1/health", (req, res) => {
-    res.status(200).json({
-        success: true,
-        status: "healthy",
+    const databaseConnected = mongoose.connection.readyState === 1;
+
+    res.status(databaseConnected ? 200 : 503).json({
+        success: databaseConnected,
+        status: databaseConnected ? "healthy" : "database-unavailable",
         service: "database-engineering-api",
         version: "1.0.0",
         uptime: Number(process.uptime().toFixed(2)),
