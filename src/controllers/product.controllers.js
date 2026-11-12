@@ -108,7 +108,10 @@ const getProducts = async (req, res, next) => {
 // Fetch a single product by MongoDB document ID.
 const getProductById = async (req, res, next) => {
     try {
-        const product = await Product.findById(req.params.id).lean();
+        const product = await Product.findOne({
+            _id: req.params.id,
+            deletedAt: null,
+        }).lean();
 
         if (!product) {
             return res.status(404).json({

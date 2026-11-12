@@ -59,6 +59,8 @@ GET /api/v1/products
 GET /api/v1/products/:id
 ```
 
+This endpoint returns active products only. Soft-deleted products are omitted, matching the default product list behavior.
+
 ### Create Product
 
 ```http
